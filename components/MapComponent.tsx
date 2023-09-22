@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import MapView, { Region, Marker } from "react-native-maps";
 import useDebuncedRegionData from "../hooks/useDebuncedRegionData";
