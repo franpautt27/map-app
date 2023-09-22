@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Button,
   Text,
@@ -8,16 +8,41 @@ import {
 } from "react-native";
 
 import useUserLocation from "./hooks/useUserLocation";
-import { Region } from "react-native-maps";
+import { Marker, Region } from "react-native-maps";
 import MapComponent from "./components/MapComponent";
+import { fetchPointsOfInterest } from "./services/pointsOfInterest";
+import { PointOfInterest } from "./interfaces/PointsOfInterest";
 
 export default function App() {
   const { text, outputLocation } = useUserLocation();
+  const [pointsOfInterest, setPointsOfInterest] = useState<PointOfInterest[]>(
+    []
+  );
   const mapRef = useRef<any>(null);
-  
 
-  const onRegionChange = (region: Region) => {
-    console.log(region);
+  const onRegionChange = async (region: Region) => {
+    const resPointsOfInterest = await fetchPointsOfInterest({
+      latitude: region.latitude,
+      latitudeDelta: region.latitudeDelta,
+      longitude: region.longitude,
+      longitudeDelta: region.longitudeDelta,
+    });
+    if (resPointsOfInterest !== undefined) {
+      setPointsOfInterest(resPointsOfInterest);
+    }
+  };
+
+  const showLocationsOfInterest = () => {
+    return pointsOfInterest.map((point, index) => {
+      return (
+        <Marker
+          key={index}
+          coordinate={{ latitude: point.latitude, longitude: point.longitude }}
+          title={point.title}
+          description={point.category}
+        />
+      );
+    });
   };
 
   const goToUserLocation = () => {
@@ -41,6 +66,7 @@ export default function App() {
       <Button title="Go to user's location" onPress={goToUserLocation} />
       <View style={styles.mapConainer}>
         <MapComponent
+        showLocationsOfInterest={showLocationsOfInterest}
           mapRef={mapRef}
           initialRegion={outputLocation}
           onDebounce={onRegionChange}
@@ -61,5 +87,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-  mapConainer: { height: "70%", width: "100%", marginTop: 50 }
+  mapConainer: { height: "70%", width: "100%", marginTop: 50 },
 });

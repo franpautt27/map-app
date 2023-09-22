@@ -6,10 +6,11 @@ interface Props {
   onDebounce: (regionValue: Region) => void;
   initialRegion: Region;
   mapRef?: any;
+  showLocationsOfInterest: () => React.JSX.Element[]
 }
 
 const MapComponent = (props: Props) => {
-  const { onDebounce, initialRegion, mapRef } = props;
+  const { onDebounce, initialRegion, mapRef, showLocationsOfInterest } = props;
 
   const [currentRegion, setCurrentRegion] = useState<Region>(initialRegion);
   const onRegionChange = (region: Region) => {
@@ -28,6 +29,7 @@ const MapComponent = (props: Props) => {
       onRegionChangeComplete={onRegionChange}
       style={styles.map}
     >
+      {showLocationsOfInterest()}
       <Marker
         coordinate={{
           latitude: initialRegion.latitude,
