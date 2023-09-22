@@ -1,11 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useRef } from "react";
+import {
+  Button,
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
+
+import useUserLocation from "./hooks/useUserLocation";
+import MapView, { Region } from "react-native-maps";
+import useDebuncedRegionData from "./hooks/useDebuncedRegionData";
+import MapComponent from "./components/MapComponent";
+import { transformLocation } from "./utils/transformLocation";
 
 export default function App() {
+  const { text, outputLocation } = useUserLocation();
+  const mapRef = useRef<any>(null);
+  
+
+  const onRegionChange = (region: Region) => {
+    console.log(region);
+  };
+
+  const goToUserLocation = () => {
+    mapRef.current.animateToRegion(outputLocation, 1000);
+  };
+
+  if (!outputLocation)
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator />
+      </View>
+    );
+  if (text.includes("denied"))
+    return (
+      <View style={styles.container}>
+        <Text>{text}</Text>
+      </View>
+    );
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Button title="Go to user's location" onPress={goToUserLocation} />
+      <View style={styles.mapConainer}>
+        <MapComponent
+          mapRef={mapRef}
+          initialRegion={outputLocation}
+          onDebounce={onRegionChange}
+        />
+      </View>
     </View>
   );
 }
@@ -13,8 +55,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
   },
+  paragraph: {
+    fontSize: 18,
+    textAlign: "center",
+  },
+  mapConainer: { height: "70%", width: "100%", marginTop: 50 }
 });
