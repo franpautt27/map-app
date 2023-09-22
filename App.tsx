@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import {
   Button,
   Text,
@@ -40,6 +40,7 @@ export default function App() {
           coordinate={{ latitude: point.latitude, longitude: point.longitude }}
           title={point.title}
           description={point.category}
+          icon={{ uri: point.icon }}
         />
       );
     });
@@ -64,9 +65,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Button title="Go to user's location" onPress={goToUserLocation} />
-      <View style={styles.mapConainer}>
+      <View style={styles.mapContainer}>
         <MapComponent
-        showLocationsOfInterest={showLocationsOfInterest}
+          showLocationsOfInterest={showLocationsOfInterest}
           mapRef={mapRef}
           initialRegion={outputLocation}
           onDebounce={onRegionChange}
@@ -87,5 +88,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-  mapConainer: { height: "70%", width: "100%", marginTop: 50 },
+  mapContainer: { height: "70%", width: "100%", marginTop: 50 },
 });

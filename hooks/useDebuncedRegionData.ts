@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {Region} from 'react-native-maps'
 
 
-const useDebuncedRegionData = (inputRegion: Region, time = 0) => {
+const useDebuncedRegionData = (inputRegion: Region, time = 500) => {
     const [debouncedRegion, setDebouncedRegion] = useState(inputRegion)
 
 
