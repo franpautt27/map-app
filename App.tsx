@@ -39,7 +39,7 @@ export default function App() {
           key={index}
           coordinate={{ latitude: point.latitude, longitude: point.longitude }}
           title={point.title}
-          description={point.category}
+          description={point.category + " - Rating: " + point.rating + "/10"}
           icon={{ uri: point.icon }}
         />
       );
