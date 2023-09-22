@@ -8,10 +8,8 @@ import {
 } from "react-native";
 
 import useUserLocation from "./hooks/useUserLocation";
-import MapView, { Region } from "react-native-maps";
-import useDebuncedRegionData from "./hooks/useDebuncedRegionData";
+import { Region } from "react-native-maps";
 import MapComponent from "./components/MapComponent";
-import { transformLocation } from "./utils/transformLocation";
 
 export default function App() {
   const { text, outputLocation } = useUserLocation();
